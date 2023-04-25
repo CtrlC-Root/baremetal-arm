@@ -20,7 +20,7 @@ pacman -S arm-none-eabi-gcc arm-none-eabi-gdb arm-none-eabi-newlib
 On Void Linux:
 
 ```bash
-xbps-install cross-arm-none-eabi cross-arm-none-eabi-newlib
+xbps-install cross-arm-none-eabi cross-arm-none-eabi-gdb cross-arm-none-eabi-newlib
 ```
 
 Build the project:
