@@ -23,7 +23,8 @@ arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb \
     -Og -g \
     -c -o "${BUILD}/main.o" "${SOURCE}/main.c"
 
-# arm-none-eabi-objdump -dhtrwC ./build/main.o
+# XXX
+#arm-none-eabi-objdump -dhtrwC ./build/main.o
 
 # LINK
 # -nostdlib implies -nodefaultlibs -nostartfiles
@@ -40,5 +41,5 @@ arm-none-eabi-objcopy -O binary \
     "${BUILD}/main.elf" "${BUILD}/main.bin"
 
 # XXX
-/home/alex/projects/uf2/utils/uf2conv.py --base 0x4000 --convert \
-    --output "${BUILD}/main.uf2" "${BUILD}/main.bin"
+#/home/alex/projects/uf2/utils/uf2conv.py --base 0x4000 --convert \
+#    --output "${BUILD}/main.uf2" "${BUILD}/main.bin"
