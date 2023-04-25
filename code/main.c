@@ -5,7 +5,7 @@
 // page 804, 808
 static uint32_t* const PORT_BASE = (uint32_t*) (0x41008000);
 static uint32_t* const PORT_A    = PORT_BASE + (0x80 * 0);
-static uint32_t* const PORT_B    = PORT_BASE + (0x80 * 1);
+// static uint32_t* const PORT_B    = PORT_BASE + (0x80 * 1);
 
 
 // static uint32_t* const PORT_A_DIR       = PORT_A + 0x00;
@@ -29,11 +29,11 @@ static uint32_t* const PORT_A_OUTSET    = PORT_A + 0x18;
 
 // static uint32_t* const PORT_B_DIR       = PORT_B + 0x00;
 // static uint32_t* const PORT_B_DIRCLR    = PORT_B + 0x04;
-static uint32_t* const PORT_B_DIRSET    = PORT_B + 0x08;
+// static uint32_t* const PORT_B_DIRSET    = PORT_B + 0x08;
 // static uint32_t* const PORT_B_DIRTGL    = PORT_B + 0x0C;
 // static uint32_t* const PORT_B_OUT       = PORT_B + 0x10;
-static uint32_t* const PORT_B_OUTCLR    = PORT_B + 0x14;
-static uint32_t* const PORT_B_OUTSET    = PORT_B + 0x18;
+// static uint32_t* const PORT_B_OUTCLR    = PORT_B + 0x14;
+// static uint32_t* const PORT_B_OUTSET    = PORT_B + 0x18;
 // static uint32_t* const PORT_B_OUTTGL    = PORT_B + 0x1C;
 // static uint32_t* const PORT_B_IN        = PORT_B + 0x20;
 // static uint32_t* const PORT_B_CTRL      = PORT_B + 0x24;
