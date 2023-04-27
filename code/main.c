@@ -1,20 +1,26 @@
 // Standard Library
 #include <stdint.h>
 
+#define PORT_BASE 0x41008000
+#define PORT(PI) (PORT_BASE + (0x80 * PI))
+#define PORT_DIRSET(PI) (PORT(PI) + 0x08)
+#define PORT_OUTCLR(PI) (PORT(PI) + 0x14)
+#define PORT_OUTSET(PI) (PORT(PI) + 0x18)
+
 
 // page 804, 808
-static uint32_t* const PORT_BASE = (uint32_t*) (0x41008000);
-static uint32_t* const PORT_A    = PORT_BASE + (0x80 * 0);
+// static uint32_t* const PORT_BASE = (uint32_t*) (0x41008000);
+// static uint32_t* const PORT_A    = PORT_BASE + (0x80 * 0);
 // static uint32_t* const PORT_B    = PORT_BASE + (0x80 * 1);
 
 
 // static uint32_t* const PORT_A_DIR       = PORT_A + 0x00;
 // static uint32_t* const PORT_A_DIRCLR    = PORT_A + 0x04;
-static uint32_t* const PORT_A_DIRSET    = PORT_A + 0x08;
+static uint32_t* const PORT_A_DIRSET    = (uint32_t*) PORT_DIRSET(0);
 // static uint32_t* const PORT_A_DIRTGL    = PORT_A + 0x0C;
 // static uint32_t* const PORT_A_OUT       = PORT_A + 0x10;
-static uint32_t* const PORT_A_OUTCLR    = PORT_A + 0x14;
-static uint32_t* const PORT_A_OUTSET    = PORT_A + 0x18;
+static uint32_t* const PORT_A_OUTCLR    = (uint32_t*) PORT_OUTCLR(0);
+static uint32_t* const PORT_A_OUTSET    = (uint32_t*) PORT_OUTSET(0);
 // static uint32_t* const PORT_A_OUTTGL    = PORT_A + 0x1C;
 // static uint32_t* const PORT_A_IN        = PORT_A + 0x20;
 // static uint32_t* const PORT_A_CTRL      = PORT_A + 0x24;
