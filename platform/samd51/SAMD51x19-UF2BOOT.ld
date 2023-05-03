@@ -12,18 +12,21 @@ OUTPUT_FORMAT("elf32-littlearm", "elf32-littlearm", "elf32-littlearm")
 OUTPUT_ARCH(arm)
 SEARCH_DIR(.)
 
+/* UF2 bootloader on M4 boards uses 16K */
+UF2BOOT_SIZE = 16K;
+
 MEMORY
 {
-    UF2BOOT(r) : ORIGIN = 0x00000000, LENGTH = 16K
-    FLASH(rx)  : ORIGIN = 0x00004000, LENGTH = 512K - 16K
+    UF2BOOT(r) : ORIGIN = 0x00000000, LENGTH = UF2BOOT_SIZE
+    FLASH(rx)  : ORIGIN = 0x00004000, LENGTH = 512K - UF2BOOT_SIZE
     NVRAM(r)   : ORIGIN = 0x00804000, LENGTH = 512
     ESRAM(rwx) : ORIGIN = 0x20000000, LENGTH = 192K
     BSRAM(rwx) : ORIGIN = 0x47000000, LENGTH = 8K
 }
 
 STACK_SIZE = DEFINED(STACK_SIZE) ? STACK_SIZE : DEFINED(__stack_size__) ? __stack_size__ : 32K;
-HEAP_SIZE = DEFINED(HEAP_SIZE) ? HEAP_SIZE : DEFINED(__heap_size__) ? __heap_size__ : (LENGTH(ESRAM) - STACK_SIZE);
 
+/* https://sourceware.org/binutils/docs/ld/Entry-Point.html */
 ENTRY(startup)
 
 SECTIONS
@@ -80,14 +83,24 @@ SECTIONS
         . = ALIGN(4);
         _heap_start = .;
 
-        . = . + HEAP_SIZE;
+        /* use all remaining space before the stack */
+        . = ORIGIN(ESRAM) + LENGTH(ESRAM) - STACK_SIZE;
 
         . = ALIGN(4);
         _heap_end = .;
     } >ESRAM
 
     /* stack */
-    . = ALIGN(4);
-    _stack_start = .;
-    _stack_end = ORIGIN(ESRAM) + LENGTH(ESRAM);
+    .stack (NOLOAD) :
+    {
+        . = ALIGN(4);
+        _stack_start = .;
+
+        . = . + STACK_SIZE;
+
+        . = ALIGN(4);
+        _stack_end = .;
+    } >ESRAM
 }
+
+HEAP_SIZE = _heap_end - _heap_start;
