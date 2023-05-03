@@ -33,25 +33,6 @@ static uint32_t* const PORT_A_OUTSET    = (uint32_t*) PORT_OUTSET(0);
 // ...
 // static uint32_t* const PORT_A_PINCFG31  = PORT_A + 0x40 + 0x1F;
 
-// static uint32_t* const PORT_B_DIR       = PORT_B + 0x00;
-// static uint32_t* const PORT_B_DIRCLR    = PORT_B + 0x04;
-// static uint32_t* const PORT_B_DIRSET    = PORT_B + 0x08;
-// static uint32_t* const PORT_B_DIRTGL    = PORT_B + 0x0C;
-// static uint32_t* const PORT_B_OUT       = PORT_B + 0x10;
-// static uint32_t* const PORT_B_OUTCLR    = PORT_B + 0x14;
-// static uint32_t* const PORT_B_OUTSET    = PORT_B + 0x18;
-// static uint32_t* const PORT_B_OUTTGL    = PORT_B + 0x1C;
-// static uint32_t* const PORT_B_IN        = PORT_B + 0x20;
-// static uint32_t* const PORT_B_CTRL      = PORT_B + 0x24;
-// static uint32_t* const PORT_B_WRCONFIG  = PORT_B + 0x28;
-// static uint32_t* const PORT_B_EVCTRL    = PORT_B + 0x2C;
-// static uint32_t* const PORT_B_PMUX0     = PORT_B + 0x30 + 0x0;
-// ...
-// static uint32_t* const PORT_B_PMUX15    = PORT_B + 0x30 + 0xF;
-// static uint32_t* const PORT_B_PINCFG0   = PORT_B + 0x40 + 0x00;
-// ...
-// static uint32_t* const PORT_B_PINCFG31  = PORT_B + 0x40 + 0x1F;
-
 static uint32_t pattern = 0xABCD0123;
 
 void main() {
