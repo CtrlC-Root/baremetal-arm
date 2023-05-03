@@ -10,8 +10,8 @@
  * linker script symbol.
  */
 
-// extern const void _text_start;
-// extern const void _text_end;
+extern const void _text_start;
+extern const void _text_end;
 
 extern const void _data_flash_start;
 extern const void _data_ram_start;
@@ -32,6 +32,10 @@ extern void main();
  * Reset vector.
  */
 void startup();
+
+#define SCB_VTOR_MASK (0x1FFFFFFul << 7U)
+static uint32_t* const SCB_VTOR  = (uint32_t*) 0xE000ED08;
+// static uint32_t* const SCB_CPACR = (uint32_t*) 0xE000ED88;
 
 /**
  * Vector table.
@@ -61,6 +65,16 @@ void startup() {
   for (ptrdiff_t offset = 0; offset < bss_size; offset += sizeof(uint32_t)) {
     *(((uint32_t*) &_bss_start) + offset) = 0x00;
   }
+
+  // configure the interrupt vector table base address
+  *SCB_VTOR = ((uintptr_t) &_text_start) & SCB_VTOR_MASK;
+
+  // enable the floating point unit
+  // *SCB_CPACR |= (0xFu << 20);
+  // TODO: __SDB()
+  // TODO: __ISB()
+
+  // TODO: initialize C library
 
   // run the application
   main();
