@@ -52,45 +52,48 @@ void isr_reset();
  * https://en.wikipedia.org/wiki/Weak_symbol
  */
 
-void isr_nmi()            __attribute__ ((weak, alias("isr_default")));
-void isr_hard_fault()     __attribute__ ((weak, alias("isr_default")));
-void isr_mem_manage()     __attribute__ ((weak, alias("isr_default")));
-void isr_bus_fault()      __attribute__ ((weak, alias("isr_default")));
-void isr_usage_fault()    __attribute__ ((weak, alias("isr_default")));
-void isr_sv_call()        __attribute__ ((weak, alias("isr_default")));
-void isr_debug_monitor()  __attribute__ ((weak, alias("isr_default")));
-void isr_sv_pending()     __attribute__ ((weak, alias("isr_default")));
-void isr_sys_tick()       __attribute__ ((weak, alias("isr_default")));
+void isr_nmi()              __attribute__ ((weak, alias("isr_default")));
+void isr_hard_fault()       __attribute__ ((weak, alias("isr_default")));
+void isr_memory_fault()     __attribute__ ((weak, alias("isr_default")));
+void isr_bus_fault()        __attribute__ ((weak, alias("isr_default")));
+void isr_usage_fault()      __attribute__ ((weak, alias("isr_default")));
+void isr_supervisor_call()  __attribute__ ((weak, alias("isr_default")));
+void isr_debug_monitor()    __attribute__ ((weak, alias("isr_default")));
+void isr_service_call()     __attribute__ ((weak, alias("isr_default")));
+void isr_sys_tick()         __attribute__ ((weak, alias("isr_default")));
 
 /**
  * Vector table.
  *
  * Note: The first entry should be a point to the top of the stack but in this
  * project that is automatically added by the linker script.
+ *
+ * https://interrupt.memfault.com/blog/arm-cortex-m-exceptions-and-nvic
  */
-uintptr_t vectors[] __attribute__((section(".vectors"))) = {
-  (uintptr_t) isr_reset,
-  (uintptr_t) isr_nmi,
-  (uintptr_t) isr_hard_fault,
-  (uintptr_t) isr_mem_manage,
+uintptr_t vectors[138] __attribute__((section(".vectors"))) = {
+  (uintptr_t) isr_reset,           // Fixed priority -3
+  (uintptr_t) isr_nmi,             // Fixed priority -2
+  (uintptr_t) isr_hard_fault,      // Fixed priority -1
+  (uintptr_t) isr_memory_fault,
   (uintptr_t) isr_bus_fault,
   (uintptr_t) isr_usage_fault,
-  (uintptr_t) (0x0ul),            // 7: Reserved
-  (uintptr_t) (0x0ul),            // 8: Reserved
-  (uintptr_t) (0x0ul),            // 9: Reserved
-  (uintptr_t) (0x0ul),            // 10: Reserved
-  (uintptr_t) isr_sv_call,
+  (uintptr_t) (0x0ul),             // 7: Reserved
+  (uintptr_t) (0x0ul),             // 8: Reserved
+  (uintptr_t) (0x0ul),             // 9: Reserved
+  (uintptr_t) (0x0ul),             // 10: Reserved
+  (uintptr_t) isr_supervisor_call,
   (uintptr_t) isr_debug_monitor,
-  (uintptr_t) (0x0ul),            // 13: Reserved
-  (uintptr_t) isr_sv_pending,
+  (uintptr_t) (0x0ul),             // 13: Reserved
+  (uintptr_t) isr_service_call,
   (uintptr_t) isr_sys_tick
 
-  // TODO: define remaining ISRs up to 136 (defined for Cortex M4)
+  // TODO: define remaining ISRs for SAMD51
 };
 
 // Default interrupt handler.
 void isr_default() {
-  // XXX: do nothing
+  // XXX: infinite loop to create an oppoertunity to attach a debugger?
+  while (1);
 }
 
 // Reset interrupt handler.
