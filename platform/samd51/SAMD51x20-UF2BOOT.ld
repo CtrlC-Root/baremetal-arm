@@ -47,15 +47,18 @@ SECTIONS
     } >FLASH
 
     /* initialized data, copied to RAM on startup */
+    . = ALIGN(4);
+    _data_flash_start = .;
+
     .data :
     {
         . = ALIGN(4);
-        _data_start = .;
+        _data_ram_start = .;
 
         *(.data*)
 
         . = ALIGN(4);
-        _data_end = .;
+        _data_ram_end = .;
     } >ESRAM AT>FLASH
 
     /* uninitialized data */
