@@ -36,7 +36,7 @@ SECTIONS
         . = ALIGN(4);
         _text_start = .;
 
-        LONG(_stack_start)
+        LONG(_stack_end)                /* stack pointer */
         KEEP(*(.vectors .vectors.*))    /* vector table */
         *(.text*)                       /* code */
         *(.glue_7)                      /* GNU LD generated glue for ARM -> Thumb calls */
