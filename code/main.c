@@ -52,6 +52,7 @@ static uint32_t* const PORT_A_OUTSET    = (uint32_t*) PORT_OUTSET(0);
 // ...
 // static uint32_t* const PORT_B_PINCFG31  = PORT_B + 0x40 + 0x1F;
 
+static uint32_t pattern = 0xABCD0123;
 
 void main() {
     volatile uint32_t i;
@@ -61,8 +62,11 @@ void main() {
 
     // blink the LED
     while (1) {
+        // rotate the pattern 1 bit left
+        pattern = (pattern << 1) | (pattern >> 31);
+
         // turn on LED
-        *PORT_A_OUTSET = (1u << 16);
+        *PORT_A_OUTSET = ((pattern & 0x00000001) << 16);
 
         // sleep
         for (i = 0; i < 0xFFFF; i++) {
