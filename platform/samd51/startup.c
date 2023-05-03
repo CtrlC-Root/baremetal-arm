@@ -24,18 +24,43 @@ extern const void _bss_end;
 // extern const void _stack_end;
 
 /**
+ * System Control Block Registers
+ */
+
+#define SCB_VTOR_MASK (0x1FFFFFFul << 7U)
+static uint32_t* const SCB_VTOR  = (uint32_t*) 0xE000ED08;
+// static uint32_t* const SCB_CPACR = (uint32_t*) 0xE000ED88;
+
+/**
  * Application entry point.
  */
 extern void main();
 
 /**
- * Reset vector.
+ * Default interrupt handler.
  */
-void startup();
+void isr_default();
 
-#define SCB_VTOR_MASK (0x1FFFFFFul << 7U)
-static uint32_t* const SCB_VTOR  = (uint32_t*) 0xE000ED08;
-// static uint32_t* const SCB_CPACR = (uint32_t*) 0xE000ED88;
+/**
+ * Reset interrupt handler.
+ */
+void isr_reset();
+
+/**
+ * Default implementation of standard interrupt handlers.
+ *
+ * https://en.wikipedia.org/wiki/Weak_symbol
+ */
+
+void isr_nmi()            __attribute__ ((weak, alias("isr_default")));
+void isr_hard_fault()     __attribute__ ((weak, alias("isr_default")));
+void isr_mem_manage()     __attribute__ ((weak, alias("isr_default")));
+void isr_bus_fault()      __attribute__ ((weak, alias("isr_default")));
+void isr_usage_fault()    __attribute__ ((weak, alias("isr_default")));
+void isr_sv_call()        __attribute__ ((weak, alias("isr_default")));
+void isr_debug_monitor()  __attribute__ ((weak, alias("isr_default")));
+void isr_sv_pending()     __attribute__ ((weak, alias("isr_default")));
+void isr_sys_tick()       __attribute__ ((weak, alias("isr_default")));
 
 /**
  * Vector table.
@@ -43,13 +68,33 @@ static uint32_t* const SCB_VTOR  = (uint32_t*) 0xE000ED08;
  * Note: The first entry should be a point to the top of the stack but in this
  * project that is automatically added by the linker script.
  */
-uintptr_t vectors[1] __attribute__((section(".vectors"))) = {
-  (uintptr_t) startup
-  // TODO: leave space for every other vector
+uintptr_t vectors[] __attribute__((section(".vectors"))) = {
+  (uintptr_t) isr_reset,
+  (uintptr_t) isr_nmi,
+  (uintptr_t) isr_hard_fault,
+  (uintptr_t) isr_mem_manage,
+  (uintptr_t) isr_bus_fault,
+  (uintptr_t) isr_usage_fault,
+  (uintptr_t) (0x0ul),            // 7: Reserved
+  (uintptr_t) (0x0ul),            // 8: Reserved
+  (uintptr_t) (0x0ul),            // 9: Reserved
+  (uintptr_t) (0x0ul),            // 10: Reserved
+  (uintptr_t) isr_sv_call,
+  (uintptr_t) isr_debug_monitor,
+  (uintptr_t) (0x0ul),            // 13: Reserved
+  (uintptr_t) isr_sv_pending,
+  (uintptr_t) isr_sys_tick
+
+  // TODO: define remaining ISRs up to 136 (defined for Cortex M4)
 };
 
-// Reset vector.
-void startup() {
+// Default interrupt handler.
+void isr_default() {
+  // XXX: do nothing
+}
+
+// Reset interrupt handler.
+void isr_reset() {
   // copy DATA segment from FLASH to ESRAM
   // https://en.cppreference.com/w/c/types/ptrdiff_t
   // NOTE: linker script aligns DATA segment boundaries to 4 bytes

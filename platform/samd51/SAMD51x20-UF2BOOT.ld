@@ -27,7 +27,7 @@ MEMORY
 STACK_SIZE = DEFINED(STACK_SIZE) ? STACK_SIZE : DEFINED(__stack_size__) ? __stack_size__ : 32K;
 
 /* https://sourceware.org/binutils/docs/ld/Entry-Point.html */
-ENTRY(startup)
+ENTRY(isr_reset)
 
 SECTIONS
 {

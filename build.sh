@@ -59,4 +59,4 @@ if which $UF2CONV; then
 fi
 
 # XXX: manual verification
-arm-none-eabi-objdump -dhtrwC ./build/main.elf | less
+# arm-none-eabi-objdump -dhtrwC ./build/main.elf | less
