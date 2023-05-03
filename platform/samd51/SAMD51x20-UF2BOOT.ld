@@ -88,7 +88,7 @@ SECTIONS
 
         . = ALIGN(4);
         _heap_end = .;
-    } >ESRAM
+    } >ESRAM AT>ESRAM
 
     /* stack */
     .stack (NOLOAD) :
@@ -100,7 +100,7 @@ SECTIONS
 
         . = ALIGN(4);
         _stack_end = .;
-    } >ESRAM
+    } >ESRAM AT>ESRAM
 }
 
 HEAP_SIZE = _heap_end - _heap_start;
