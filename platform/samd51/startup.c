@@ -46,7 +46,7 @@ uintptr_t vectors[1] __attribute__((section(".vectors"))) = {
 
 // Reset vector.
 void startup() {
-  // copy data from FLASH to ESRAM
+  // copy DATA segment from FLASH to ESRAM
   // https://en.cppreference.com/w/c/types/ptrdiff_t
   // NOTE: linker script aligns DATA segment boundaries to 4 bytes
   ptrdiff_t data_size = &_data_ram_end - &_data_ram_start; // size in bytes
@@ -54,7 +54,7 @@ void startup() {
     *(((uint32_t*) &_data_ram_start) + offset) = *(((uint32_t*) &_data_flash_start) + offset);
   }
 
-  // initialize BSS region with zeros
+  // initialize BSS segment in ESRAM with zeros
   // https://en.cppreference.com/w/c/types/ptrdiff_t
   // NOTE: linker script aligns BSS segment boundaries to 4 bytes
   ptrdiff_t bss_size = &_bss_end - &_bss_start; // size in bytes
