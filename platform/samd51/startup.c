@@ -29,7 +29,7 @@ extern const void _bss_end;
 
 #define SCB_VTOR_MASK (0x1FFFFFFul << 7U)
 static uint32_t* const SCB_VTOR  = (uint32_t*) 0xE000ED08;
-// static uint32_t* const SCB_CPACR = (uint32_t*) 0xE000ED88;
+static uint32_t* const SCB_CPACR = (uint32_t*) 0xE000ED88;
 
 /**
  * Application entry point.
@@ -117,10 +117,11 @@ void isr_reset() {
   // configure the interrupt vector table base address
   *SCB_VTOR = ((uintptr_t) &_text_start) & SCB_VTOR_MASK;
 
-  // enable the floating point unit
-  // *SCB_CPACR |= (0xFu << 20);
-  // TODO: __SDB()
-  // TODO: __ISB()
+  // enable the floating point unit (CP10 & CP11)
+  *SCB_CPACR |= (0xFu << 20);
+  //asm("dmb ish");  // data memory barrier (all preceeding writes must finish before future memory ops)
+  asm("dsb ish");  // data sync barrier (data memory barrier + all outstanding writes must finish)
+  asm("isb sy");   // instruction sync barrier (flush instruction prefetch)
 
   // TODO: initialize C library
 
