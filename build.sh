@@ -29,6 +29,7 @@ arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb \
 # -Wl,--print-map to print linker memory map
 arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb \
     -nostdlib \
+    -Wl,--library-path "${TOP}/platform/samd51" \
     -Wl,--script "${TOP}/platform/samd51/SAMD51x19-UF2BOOT.ld" \
     -o "${BUILD}/main.elf" "${BUILD}/startup.o" "${BUILD}/main.o"
 
